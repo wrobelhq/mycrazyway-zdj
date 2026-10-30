@@ -8,7 +8,7 @@ os.makedirs('engwe', exist_ok=True)
 names = [l.strip() for l in open('lista.txt', encoding='utf-8') if l.strip()]
 ok = err = 0
 for f in names:
-    out = os.path.join('engwe', os.path.splitext(f)[0] + '.jpg')
+    out = os.path.join('engwe', os.path.splitext(f)[0] + ('_jpg' if f == '10.jpg' else '') + '.jpg')
     if os.path.exists(out):
         continue
     try:
