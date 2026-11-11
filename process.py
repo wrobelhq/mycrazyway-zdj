@@ -8,11 +8,14 @@ os.makedirs('engwe', exist_ok=True)
 names = [l.strip() for l in open('lista.txt', encoding='utf-8') if l.strip()]
 ok = err = 0
 for f in names:
-    out = os.path.join('engwe', os.path.splitext(f)[0] + ('_jpg' if f == '10.jpg' else '') + '.jpg')
+    isurl = f.startswith('http')
+    base = f.split('?')[0].split('/')[-1] if isurl else f
+    out = os.path.join('engwe', os.path.splitext(base)[0] + ('_jpg' if f == '10.jpg' else '') + '.jpg')
     if os.path.exists(out):
         continue
     try:
-        req = urllib.request.Request(P + f + '?width=1200', headers={'User-Agent': 'Mozilla/5.0'})
+        src = f if isurl else P + f + '?width=1200'
+        req = urllib.request.Request(src, headers={'User-Agent': 'Mozilla/5.0'})
         data = urllib.request.urlopen(req, timeout=60).read()
         im = Image.open(io.BytesIO(data))
         if im.mode in ('RGBA', 'LA', 'P'):
